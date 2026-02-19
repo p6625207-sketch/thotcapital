@@ -33,11 +33,11 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'last_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'referred_by' => 'nullable|string|max:255',
+            'referred_by' => 'required|string|max:255',
         ]);
 
         $sponsor = null;

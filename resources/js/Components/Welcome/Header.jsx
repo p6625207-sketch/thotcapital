@@ -8,49 +8,47 @@ export default function Navbar({ auth }) {
 
     return (
         <nav className="bg-[#0f172a] border-b border-slate-800 text-white sticky top-0 z-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-20 items-center">
+            <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div className="flex items-center justify-between h-20">
                     
                  
                     <div className="flex items-center gap-2">
-                        <div className="bg-cyan-500 p-2 rounded-lg">
-                            <Wallet className="text-white" size={24} />
+                        <div className="p-2 rounded-lg ">
+                            <img src="https://res.cloudinary.com/dcyx3nqj5/image/upload/v1771302950/WhatsApp_Image_2026-02-17_at_12.22.47_AM-removebg-preview_s4hcm0.png"
+                             alt="Logo" className="w-20 h-20" />
                         </div>
-                        <span className="text-xl font-bold tracking-tight">
-                            FINEX <span className="text-cyan-400">AI</span>
-                        </span>
                     </div>
 
                   
-                    <div className="hidden md:flex items-center space-x-8">
-                        <Link href="/" className="text-sm font-medium text-slate-300 hover:text-cyan-400 transition">
+                    <div className="items-center hidden space-x-8 md:flex">
+                        <Link href="/" className="text-sm font-medium transition text-slate-300 hover:text-cyan-400">
                             Inicio
                         </Link>
-                        <Link href="/Acerca" className="text-sm font-medium text-slate-300 hover:text-cyan-400 transition">
+                        <Link href="/Acerca" className="text-sm font-medium transition text-slate-300 hover:text-cyan-400">
                             Acerca
                         </Link>
-                        <Link href="/Preguntas" className="text-sm font-medium text-slate-300 hover:text-cyan-400 transition">
+                        <Link href="/Preguntas" className="text-sm font-medium transition text-slate-300 hover:text-cyan-400">
                             Preguntas
                         </Link>
-                        <Link href="/Politicas" className="text-sm font-medium text-slate-300 hover:text-cyan-400 transition">
+                        <Link href="/Politicas" className="text-sm font-medium transition text-slate-300 hover:text-cyan-400">
                             Politicas
                         </Link>
-                        <Link href="/Contacto" className="text-sm font-medium text-slate-300 hover:text-cyan-400 transition">
+                        <Link href="/Contacto" className="text-sm font-medium transition text-slate-300 hover:text-cyan-400">
                             Contacto
                         </Link>
                         
                         {auth?.user ? (
-                            <Link href={route('dashboard')} className="bg-cyan-600 hover:bg-cyan-500 px-5 py-2 rounded-full text-sm font-bold transition">
+                            <Link href={route('dashboard')} className="px-5 py-2 text-sm font-bold transition rounded-full bg-cyan-600 hover:bg-cyan-500">
                                 Mi Panel
                             </Link>
                         ) : (
                             <>
-                                <Link href={route('login')} className="text-sm font-medium text-slate-300 hover:text-cyan-400 transition">
+                                <Link href={route('login')} className="text-sm font-medium transition text-slate-300 hover:text-cyan-400">
                                     Inicio de sesión
                                 </Link>
                                 <Link 
                                     href={route('register')} 
-                                    className="bg-transparent border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-white px-5 py-2 rounded-full text-sm font-bold transition"
+                                    className="px-5 py-2 text-sm font-bold transition bg-transparent border rounded-full border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-white"
                                 >
                                     Registrarse
                                 </Link>
@@ -58,7 +56,7 @@ export default function Navbar({ auth }) {
                         )}
                     </div>
 
-                    <div className="md:hidden flex items-center">
+                    <div className="flex items-center md:hidden">
                         <button onClick={() => setIsOpen(!isOpen)} className="text-slate-300">
                             {isOpen ? <X size={28} /> : <Menu size={28} />}
                         </button>
@@ -75,7 +73,7 @@ export default function Navbar({ auth }) {
                     <Link href="/Politicas" className="block py-2 text-slate-300">Politicas</Link>
                     <Link href="/Contacto" className="block py-2 text-slate-300">Contacto</Link>
                     <Link href={route('login')} className="block py-2 text-slate-300">Inicio de sesión</Link>
-                    <Link href={route('register')} className="block py-2 text-cyan-400 font-bold">Registrarse</Link>
+                    <Link href={route('register')} className="block py-2 font-bold text-cyan-400">Registrarse</Link>
                 </div>
             )}
         </nav>

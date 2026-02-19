@@ -1,23 +1,19 @@
 import { useState, useEffect } from "react";
-import { CheckCircle2, Zap } from "lucide-react";
-import PaqueteService from "@/Services/paquete.service"; // 👈 importa el servicio
+import { CheckCircle2, Zap, TrendingUp, Wallet } from "lucide-react";
+import PaqueteService from "@/Services/paquete.service";
 import { Link } from "@inertiajs/react";
 
 export default function PackageCards() {
 
-    const [selectedPackage, setSelectedPackage] = useState(null);
     const [paquetes, setPaquetes] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchPaquetes = async () => {
             const data = await PaqueteService.obtenerPaquetes();
-            
-
             if (!data.error) {
                 setPaquetes(data);
             }
-
             setLoading(false);
         };
 
@@ -25,43 +21,73 @@ export default function PackageCards() {
     }, []);
 
     if (loading) {
-        return <div className="text-white items-center text-center">Cargando paquetes...</div>;
+        return (
+            <div className="py-10 text-center text-slate-400 animate-pulse">
+                Cargando paquetes...
+            </div>
+        );
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {paquetes.map((pkg) => (
-                <div 
+                <div
                     key={pkg.id}
-                    className="bg-[#1e293b] border border-slate-800 rounded-3xl p-8 flex flex-col items-center group hover:border-amber-500/50 transition-all duration-300 shadow-xl"
+                    className="relative flex flex-col justify-between p-8 transition-all duration-300 border shadow-2xl bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700 hover:border-amber-500/50 rounded-3xl hover:-translate-y-2"
                 >
-                    <span className="text-slate-500 font-bold text-sm tracking-widest mb-2">
-                        {pkg.nombre}
-                    </span>
-
-                    <div className="text-5xl font-black text-white mb-6">
-                        {pkg.valor}
-                        <span className="text-amber-500 text-2xl">$</span>
+                    {/* Nombre */}
+                    <div className="mb-6 text-center">
+                        <h3 className="text-lg font-bold tracking-widest uppercase text-amber-500">
+                            {pkg.nombre}
+                        </h3>
+                        <p className="mt-2 text-sm text-slate-400">
+                            Ideal para comenzar a generar ingresos pasivos de forma segura.
+                        </p>
                     </div>
 
-                    <ul className="w-full space-y-3 mb-8">
+                    {/* Precio */}
+                    <div className="mb-6 text-center">
+                        <p className="text-sm text-slate-400">Inversión</p>
+                        <div className="text-4xl font-black text-white">
+                            ${pkg.valor}
+                        </div>
+                    </div>
+
+                    {/* Información financiera */}
+                    <ul className="mb-8 space-y-4 text-sm">
+                        <li className="flex items-center gap-2 text-slate-300">
+                            <TrendingUp size={16} className="text-amber-500" />
+                            Rendimiento: 
+                            <span className="font-bold text-white">
+                                {pkg.rendimiento}%
+                            </span>
+                        </li>
+
+                        <li className="flex items-center gap-2 text-slate-300">
+                            <Wallet size={16} className="text-amber-500" />
+                            Comisión:
+                            <span className="font-bold text-white">
+                                ${pkg.comision}
+                            </span>
+                        </li>
+
                         {pkg.features?.map((feature, idx) => (
-                            <li key={idx} className="flex items-center gap-2 text-slate-400 text-sm">
+                            <li key={idx} className="flex items-center gap-2 text-slate-400">
                                 <CheckCircle2 size={16} className="text-amber-500" />
                                 {feature}
                             </li>
                         ))}
                     </ul>
 
-                    <Link 
+                    {/* Botón */}
+                    <Link
                         href={"/packages"}
-                        className="w-full group/btn relative flex items-center justify-center gap-2 bg-slate-900 border border-slate-700 hover:border-amber-500 text-white font-bold py-4 rounded-2xl transition-all active:scale-95"
+                        className="relative flex items-center justify-center w-full gap-2 py-4 font-bold text-black transition-all shadow-lg bg-amber-500 hover:bg-amber-600 rounded-2xl active:scale-95"
                     >
-                        <Zap size={18} className="text-amber-500 group-hover/btn:animate-pulse" />
-                        <span className="uppercase tracking-widest text-xs">
-                            Activar
+                        <Zap size={18} />
+                        <span className="text-xs tracking-widest uppercase">
+                            Activar Plan
                         </span>
-                        <div className="absolute inset-0 bg-amber-500/5 opacity-0 group-hover/btn:opacity-100 rounded-2xl transition-opacity"></div>
                     </Link>
                 </div>
             ))}

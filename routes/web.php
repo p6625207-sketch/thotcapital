@@ -157,5 +157,17 @@ Route::get('/Contacto', function () {
 Route::get('/auth/google/redirect', [SocialLoginController::class, 'redirectToGoogle'])->name('google.redirect');
 Route::get('/auth/google/callback', [SocialLoginController::class, 'handleGoogleCallback'])->name('google.callback');
 
+// Rutas para el proceso de referido post-Google login
+Route::get('/referral-join', function () {
+  
+    if (!session()->has('google_user')) {
+        return redirect()->route('login');
+    }
+    return Inertia::render('Auth/ReferralForm', [
+        'email' => session('google_user')['email']
+    ]);
+})->name('referral.form');
+
+Route::post('/referral-join', [SocialLoginController::class, 'storeReferral'])->name('referral.store');
 
 require __DIR__ . '/auth.php';

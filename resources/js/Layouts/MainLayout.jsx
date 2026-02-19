@@ -5,7 +5,7 @@ import Footer from '@/Components/Welcome/Footer';
 export default function Layout({ title, children }) {
   return (
     <div className="min-h-screen flex flex-col bg-[#020617] text-slate-200 relative selection:bg-amber-500/30">
-      <Head title={title || "Negocio"} />
+      <Head title={title || "thot capital"} />
 
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
         <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-amber-500/5 blur-[120px] rounded-full"></div>
@@ -14,7 +14,7 @@ export default function Layout({ title, children }) {
 
       <Header className="sticky top-0 z-50 bg-[#020617]/80 backdrop-blur-md border-b border-slate-800" />
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 w-full px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
         {children}
       </main>
 

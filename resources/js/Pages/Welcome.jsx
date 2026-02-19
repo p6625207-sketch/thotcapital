@@ -15,7 +15,7 @@ import PaymentMethods from "@/Components/Welcome/PaymentMethods";
 export default function Welcome() {
 
     return (
-        <Layout title="emprendimiento">
+        <Layout title="Thot Capital">
             <ConstellationHero />
             <AboutSection />
             <FeaturesGrid />
