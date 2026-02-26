@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Copy, CheckCircle } from 'lucide-react'
 import VerifyPaymentModal from './VerifyPaymentModal'
 
-const WALLET_ADDRESS = 'TU_WALLET_USDT_AQUI' // TODO: cambiar por la wallet real de la plataforma
+const WALLET_ADDRESS = 'TMSM6CCgmpDsdjwX6ESnH8ch3jDUgL1RoX' // TODO: cambiar por la wallet real de la plataforma
 const NETWORK = 'TRC20'
 
 export default function PaymentModal({ paquete, onClose, onPurchaseComplete }) {
@@ -72,7 +72,7 @@ export default function PaymentModal({ paquete, onClose, onPurchaseComplete }) {
                 </div>
 
                 <div className="bg-slate-800/50 border border-amber-500/20 p-3 rounded-lg text-xs text-slate-400 text-center">
-                    Asegúrate de enviar exactamente el monto indicado en la red correcta.
+                    Asegúrate de enviar exactamente el monto indicado en "USDT" y en la red correcta.
                     Los pagos enviados desde otra red no podrán ser verificados.
                 </div>
 
