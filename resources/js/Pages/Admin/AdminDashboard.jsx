@@ -66,6 +66,16 @@ export default function AdminDashboard({ stats = { total_users: 0, total_investe
         </section>
 
         <div className="space-y-3 sm:space-y-5 pb-8">
+          
+          <AdminCTA
+            sectionRef={sectionWithdrawalsRef}
+            title="Pirame "
+            description="Revisa y edita la piramide"
+            buttonText="REVISAR LOS NIVELES DE LA PIRAMIDE"
+            href="/admin/piramide"
+            icon={ShieldCheck}
+            variant="blue"
+          />
 
           <AdminCTA
             sectionRef={sectionWithdrawalsRef}
@@ -105,14 +115,6 @@ export default function AdminDashboard({ stats = { total_users: 0, total_investe
             variant="blue"
           />
 
-          <AdminCTA
-            title="pagos restringidos"
-            description="Supervisa los pagos descontados por inactivida de usuario, cumplimiento diario del 200% y el progreso del 300% para garantizar la seguridad y el cumplimiento de las políticas de la plataforma."
-            buttonText="GESTIONAR PAGOS RESTRINGIDOS"
-            href="/admin/pagos-restringidos"
-            icon={User}
-            variant="amber"
-          />
 
         </div>
       </main>

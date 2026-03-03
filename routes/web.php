@@ -9,6 +9,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReferidosController;
 use App\Http\Controllers\RetiroController;
 use App\Http\Controllers\CodigoController;
+use App\Http\Controllers\PiramideController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -132,6 +133,10 @@ Route::prefix('admin')->group(function () {
             ->name('admin.paquetes.destroy');
 
         Route::post('/paquetes', [AdminControllerDashboard::class, 'storePaquete'])->name('admin.paquetes.store');
+
+        // Para la pirámide
+        Route::get('/piramide', [PiramideController::class, 'index']);
+        Route::patch('/piramide/{nivel}', [PiramideController::class, 'update'])->name('admin.piramide.update');
     });
 });
 

@@ -21,7 +21,7 @@ export default function Retiros({ auth, retiros }) {
     return (
         <LayoutAdmin title="Gestión de Retiros">
             <Head title="Solicitudes de Retiros" />
-            {/* BOTÓN PARA VOLVER */}
+     
                             <div className="mb-8">
                                 <BackButton />
                             </div>
