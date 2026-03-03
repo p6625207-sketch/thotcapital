@@ -2,9 +2,14 @@ import {
     Wallet,
     Eye,
     EyeOff,
+    CheckCircle,
+    XCircle
 } from 'lucide-react'
 import { Link } from '@inertiajs/react'
-export default function Inicio({user,data ,showBalance,setShowBalance}) {
+export default function Inicio({ user, data, showBalance, setShowBalance }) {
+
+    const isAccountActive = data.activePackage != null;
+
     return (
 
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
@@ -15,6 +20,21 @@ export default function Inicio({user,data ,showBalance,setShowBalance}) {
                 <p className="text-slate-400 mt-1">
                     Gestiona tus inversiones y ganancias
                 </p>
+
+                {/* ESTADO DE LA CUENTA */}
+                <div className="flex items-center gap-2 mt-2">
+                    {isAccountActive ? (
+                        <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-bold uppercase tracking-wider">
+                            <CheckCircle size={14} />
+                            Cuenta Activa
+                        </span>
+                    ) : (
+                        <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold uppercase tracking-wider">
+                            <XCircle size={14} />
+                            Cuenta Inactiva
+                        </span>
+                    )}
+                </div>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 w-full lg:w-96">

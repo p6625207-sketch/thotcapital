@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Models\Transaction;
+use App\Models\WalletTransaction;
 
 class RetiroController extends Controller
 {
@@ -23,10 +25,26 @@ class RetiroController extends Controller
 
         try {
 
-            // Validación
+            // Validación máxima es 50
             $request->validate([
-                'amount' => 'required|numeric',
+                'amount' => 'required|numeric|min:20|max:50',
             ]);
+           
+            //monto no valido
+            if ($request->amount <= 0) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Monto no válido'
+                ], 400);
+            }
+
+            //ingrese un monto mayor a 20 y menor a 50
+            if ($request->amount < 20 || $request->amount > 50) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Ingrese un monto entre 20 y 50'
+                ], 400);
+            }
 
             // Validar wallet
             if (!$user->wallet_address) {

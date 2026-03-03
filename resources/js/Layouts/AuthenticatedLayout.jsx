@@ -27,7 +27,7 @@ export default function AuthenticatedLayout({ children }) {
             <div className="fixed left-0 right-0 top-0 z-50 border-b border-slate-700 bg-slate-900 lg:hidden">
                 <div className="flex items-center justify-between px-4 py-4">
                     <h1 className="text-2xl font-bold text-amber-500">
-                        Emprendimiento
+                        Thot Capital
                     </h1>
                     <button
                         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -49,7 +49,7 @@ export default function AuthenticatedLayout({ children }) {
 
                     <div className="mb-12 hidden lg:block">
                         <h1 className="text-3xl font-bold text-amber-500">
-                            Emprendimiento
+                            Thot Capital
                         </h1>
                     </div>
 

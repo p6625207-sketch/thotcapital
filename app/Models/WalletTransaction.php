@@ -25,4 +25,6 @@ class WalletTransaction extends Model
     {
         return $this->belongsTo(Transaction::class);
     }
+
+    
 }

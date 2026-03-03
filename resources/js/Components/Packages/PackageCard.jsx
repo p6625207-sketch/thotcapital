@@ -39,6 +39,9 @@ export default function PackageCard({ paquete, selected, onSelect }) {
                 <Feature 
                     text={`Comisión ${paquete.comision}% por referido`} 
                 />
+                  <Feature 
+                    text="Ganacias del 300%" 
+                />
                 <Feature text="Retiros los viernes" />
                 <Feature text="Soporte 24/7" />
             </div>

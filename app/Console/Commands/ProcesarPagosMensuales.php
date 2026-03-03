@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\WalletTransaction;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Services\WalletService;
 
 class ProcesarPagosMensuales extends Command
 {
@@ -26,7 +27,7 @@ class ProcesarPagosMensuales extends Command
      */
     protected $description = 'Procesa los rendimientos mensuales de las inversiones activas.';
 
-    public function handle()
+    public function handle(WalletService $walletService)
     {
 
         $transacciones = Transaction::where('is_active', true)
@@ -36,29 +37,46 @@ class ProcesarPagosMensuales extends Command
 
         $procesados = 0;
 
+        $paquetesCerrados = 0;
+
         foreach ($transacciones as $transaccion) {
-            DB::transaction(function () use ($transaccion, &$procesados) {
+            DB::transaction(function () use ($transaccion, $walletService, &$procesados, &$paquetesCerrados) {
                 
-                $montoGanancia = ($transaccion->paquete_valor * $transaccion->rendimiento) / 100;
+                // Calculamos el monto de ganancia mensual basado en el rendimiento del paquete
+                $montoOriginal = ($transaccion->paquete_valor * $transaccion->rendimiento) / 100;
 
-                WalletTransaction::create([
-                    'transaction_id' => $transaccion->id,
-                    'amount' => $montoGanancia,
-                    'porcentaje' => $transaccion->rendimiento
-                ]);
+                // Procesamos el pago aplicando los filtros de capping diario y límite global
+                $montoPermitido = $walletService->procesarPagoComision($transaccion, $montoOriginal);
 
+                // Si el monto permitido es null o 0, significa que no se procesó la comisión por haber alcanzado límites
+                if (!is_null($montoPermitido) && $montoPermitido > 0) {
+                    WalletTransaction::create([
+                        'transaction_id' => $transaccion->id,
+                        'amount' => $montoPermitido,
+                        'porcentaje' => $transaccion->rendimiento
+                    ]);
+                
                 $user = $transaccion->user;
-                $user->increment('wallet_balance', $montoGanancia);
+                $user->increment('wallet_balance', $montoPermitido);
 
+                $procesados++;
+
+                } else {
+                    $paquetesCerrados++;
+                }
+
+                // Actualizamos la fecha de pago de la transacción para el próximo mes
                 $transaccion->update([
                     'paid_at' => Carbon::parse($transaccion->paid_at)->addMonth()
                 ]);
-
-                $procesados++;
             });
-        }
-        $this->info("Se procesaron {$procesados} rendimientos correctamente.");
 
+                
+        }
+
+        $this->info("Proceso completado");
+        $this->info(" Pagos realizados/ejecutados: $procesados");
+        $this->info(" Paquetes que alcanzaron su límite de ganancia: $paquetesCerrados");
         return Command::SUCCESS; 
     }
 }

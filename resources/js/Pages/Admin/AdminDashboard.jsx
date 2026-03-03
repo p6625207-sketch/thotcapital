@@ -71,7 +71,7 @@ export default function AdminDashboard({ stats = { total_users: 0, total_investe
           <AdminCTA
             sectionRef={sectionWithdrawalsRef}
             title="Solicitudes de Retiro"
-  description="Revisa, aprueba o rechaza las solicitudes de retiro realizadas por los usuarios antes de su procesamiento en la red."
+            description="Revisa, aprueba o rechaza las solicitudes de retiro realizadas por los usuarios antes de su procesamiento en la red."
             buttonText="REVISAR SOLICITUDES"
             href="/admin/retiros"
             icon={Wallet}
@@ -81,7 +81,7 @@ export default function AdminDashboard({ stats = { total_users: 0, total_investe
           {/* Ejemplo de uso para otra sección (Paquetes) */}
           <AdminCTA
             title="Configuración de Paquetes"
-  description="Crea, edita y administra los planes de inversión, incluyendo montos mínimos, porcentajes de retorno y duración."
+            description="Crea, edita y administra los planes de inversión, incluyendo montos mínimos, porcentajes de retorno y duración."
             buttonText="GESTIONAR PAQUETES"
             href="/admin/paquetes"
             icon={Package}
@@ -91,7 +91,7 @@ export default function AdminDashboard({ stats = { total_users: 0, total_investe
           <AdminCTA
             sectionRef={sectionWithdrawalsRef}
             title="Historial de Transacciones"
-  description="Consulta el registro completo de depósitos, retiros e inversiones realizadas dentro de la plataforma."
+            description="Consulta el registro completo de depósitos, retiros e inversiones realizadas dentro de la plataforma."
             buttonText="REVISAR HISTORIAL"
             href="/admin/transactions"
             icon={Receipt}
@@ -100,11 +100,20 @@ export default function AdminDashboard({ stats = { total_users: 0, total_investe
 
           <AdminCTA
             title="Usuarios Activos"
-  description="Supervisa la actividad, balances y rendimiento de los usuarios registrados en la plataforma."
+            description="Supervisa la actividad, balances y rendimiento de los usuarios registrados en la plataforma."
             buttonText="GESTIONAR USUARIOS"
             href="/admin/users"
             icon={User}
             variant="blue"
+          />
+
+          <AdminCTA
+            title="pagos restringidos"
+            description="Supervisa los pagos descontados por inactivida de usuario, cumplimiento diario del 200% y el progreso del 300% para garantizar la seguridad y el cumplimiento de las políticas de la plataforma."
+            buttonText="GESTIONAR PAGOS RESTRINGIDOS"
+            href="/admin/pagos-restringidos"
+            icon={User}
+            variant="amber"
           />
 
         </div>

@@ -2,24 +2,30 @@ import { Link } from '@inertiajs/react'
 
 export default function Paquetes({data}) {
     return (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+            <h3 className="text-lg font-semibold text-white mb-2">
                 Paquete Actual
             </h3>
 
             {data.activePackage ? (
                 <>
-                    <div className="space-y-3 text-slate-300">
+                    <div className="space-y-1 text-slate-300">
                         <p>
                             Inversión:
-                            <span className="text-white font-semibold ml-2">
+                            <span className="text-amber-400 font-semibold ml-2">
                                 ${Math.abs(data.activePackage.amount)}
                             </span>
                         </p>
                         <p>
                             Rendimiento mensual:
-                            <span className="text-green-400 font-semibold ml-2">
+                            <span className="text-amber-400 font-semibold ml-2">
                                 {Math.abs(data.activePackage.monthlyRate)}%
+                            </span>
+                        </p>
+                        <p>
+                            Comision por referido:
+                            <span className="text-amber-400 font-semibold ml-2">
+                                10%
                             </span>
                         </p>
                         <p>
@@ -32,7 +38,7 @@ export default function Paquetes({data}) {
 
                     <Link
                         href="/packages"
-                        className="mt-6 block text-center bg-slate-800 hover:bg-slate-700 text-white py-3 rounded-xl transition-all"
+                        className="mt-4 block text-center bg-slate-800 hover:bg-slate-700 text-white py-3 rounded-xl transition-all"
                     >
                         Mejorar Paquete
                     </Link>
