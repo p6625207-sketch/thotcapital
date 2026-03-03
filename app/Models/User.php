@@ -20,13 +20,17 @@ class User extends Authenticatable
         'password',
         'referred_by',
         'wallet_address',
-        'wallet_balance'
+        'wallet_balance',
+
+        'parent_id',
+        'binary_side',
+        'left_son_id',
+        'right_son_id',
+        'puntos_izquierda',
+        'puntos_derecha',
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token'
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     protected $casts = [
         'wallet_balance' => 'decimal:8',
@@ -61,8 +65,10 @@ class User extends Authenticatable
     //  TRANSACCIÓN ACTIVA
     public function activeTransaction(): HasOne
     {
-        return $this->hasOne(Transaction::class, 'user_id')
-                    ->where('is_active', true);
+        return $this->hasOne(Transaction::class, 'user_id')->where(
+            'is_active',
+            true
+        );
     }
 
     // Comisiones ganadas

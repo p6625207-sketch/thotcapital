@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 use App\Services\WalletService;
 use App\Models\Comision;
-use App\Models\WalletTransaction;   
+use App\Models\WalletTransaction;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
@@ -79,6 +80,9 @@ class PaymentController extends Controller
                 'paid_at' => now()->addMonth(),
             ]);
 
+            // Propagar puntos binarios hacia los padres del usuario
+            $this->propagarPuntosBinarios($user, floatval($paquete->valor));
+
             // COMISIÓN POR REFERIDO (10%)
             if ($user->referred_by) {
                 $sponsor = User::find($user->referred_by);
@@ -96,7 +100,10 @@ class PaymentController extends Controller
                         $commissionAmount
                     );
 
-                    if (!is_null($montoFinalPermitido) && $montoFinalPermitido > 0) {
+                    if (
+                        !is_null($montoFinalPermitido) &&
+                        $montoFinalPermitido > 0
+                    ) {
                         $sponsor->increment(
                             'wallet_balance',
                             $montoFinalPermitido
@@ -108,7 +115,7 @@ class PaymentController extends Controller
                             'transaction_id' => $transaction->id,
                             'amount' => $montoFinalPermitido,
                         ]);
-                    }else{
+                    } else {
                         Log::info(
                             "Comisión de referido para usuario {$sponsor->id} ajustada a 0 debido a límites diarios o globales. Comisión original: {$commissionAmount}."
                         );
@@ -147,6 +154,45 @@ class PaymentController extends Controller
                 'txId' => $matchingDeposit['txId'],
             ],
         ]);
+    }
+
+    /**
+     * Propaga los puntos binarios hacia los padres del usuario.
+     */
+    private function propagarPuntosBinarios(User $user, float $volumen)
+    {
+        $current = $user;
+        $depth = 0; // Para evitar loops infinitos en caso de datos corruptos
+
+        // Recorremos hacia arriba en el árbol binario hasta la raíz, actualizando los puntos en el lado correspondiente del padre
+        while ($current->parent_id && $depth < 100) {
+            // Limitamos la profundidad para evitar loops infinitos
+            // Bloqueamos el padre actual para evitar condiciones de carrera al actualizar los puntos
+            $parent = User::lockForUpdate()->find($current->parent_id);
+            $depth++;
+
+            if (!$parent) {
+                break;
+            }
+
+            $activo = Transaction::where('user_id', $parent->id)
+                ->where('is_active', true)
+                ->exists();
+
+            //    $calificado = $this->estaCalificado($parent);
+
+            if ($activo) {
+                
+                // Actualizamos los puntos en el lado correspondiente del padre
+                if ($current->binary_side === 'left') {
+                    $parent->increment('puntos_izquierda', $volumen);
+                } elseif ($current->binary_side === 'right') {
+                    $parent->increment('puntos_derecha', $volumen);
+                }
+            }
+
+            $current = $parent;
+        }
     }
 
     private function getBinanceDeposits(): ?array

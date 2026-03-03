@@ -8,6 +8,7 @@ use App\Models\Comision;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 
 class WalletService
 {
@@ -92,13 +93,15 @@ class WalletService
         // Esto viene de la relación getLimiteCobroDiarioAttribute() en Transaction.php
         $limiteDiario = $transaction->limite_cobro_diario;
 
+        $hoyBolivia = Carbon::now('America/La_Paz')->toDateString();
+
         // Calculamos cuánto ha ganado el usuario hoy sumando tanto las comisiones como las transacciones en la wallet
         $totalGananciaHoy = Comision::where('transaction_id', $transaction->id)
-            ->whereDate('created_at', now()->toDateString())
+            ->whereDate('created_at', $hoyBolivia)
             ->sum('amount') 
             + 
             WalletTransaction::where('transaction_id', $transaction->id)
-            ->whereDate('created_at', now()->toDateString())
+            ->whereDate('created_at', $hoyBolivia)
             ->sum('amount');
 
         // Si ya alcanzó o superó el límite diario, no se permite más ganancias hoy

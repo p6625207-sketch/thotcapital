@@ -13,6 +13,7 @@ use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Code;
+use Illuminate\Support\Facades\DB; // Asegúrate de tener este import arribause Illuminate\Support\Facades\Log;
 
 class RegisteredUserController extends Controller
 {
@@ -35,44 +36,149 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
-            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'email' =>
+                'required|string|lowercase|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'referred_by' => 'required|string|max:255',
         ]);
 
-        $sponsor = null;
-
         if ($request->referred_by) {
-
             $codeData = Code::where('code', $request->referred_by)->first();
 
             if (!$codeData) {
-                return back()->withErrors([
-                    'referred_by' => 'El código de referido es incorrecto.'
-                ])->withInput();
+                return back()
+                    ->withErrors([
+                        'referred_by' => 'El código de referido es incorrecto.',
+                    ])
+                    ->withInput();
             }
-
-            $sponsor = $codeData->user_id;
         }
 
+        try {
+            if (!$codeData) {
+                return back()
+                    ->withErrors([
+                        'referred_by' => 'El código de referido es incorrecto.',
+                    ])
+                    ->withInput();
+            }
 
-        $user = User::create([
-            'name' => $request->name,
-            'last_name' => $request->last_name,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'referred_by' => $sponsor,
-            'wallet'=> 0,
-        ]);
+            $response = DB::transaction(function () use ($request, $codeData) {
+                $sponsorUser = User::lockForUpdate()->find($codeData->user_id);
 
+                if (!$sponsorUser) {
+                    throw new \Exception('Sponsor no encontrado.');
+                }
 
-        Code::createForUser($user->id);
+                // Buscar posición disponible por amplitud
+                $position = $this->findAvailablePosition($sponsorUser->id);
 
-        event(new Registered($user));
+                if (!$position) {
+                    throw new \Exception(
+                        'No hay posición disponible en el árbol.'
+                    );
+                }
 
-        Auth::login($user);
+                // Buscar el usuario padre para la nueva posición y bloquearlo para evitar condiciones de carrera
+                $parent = User::lockForUpdate()->find($position['parent']->id);
 
-        return redirect(route('dashboard', absolute: false));
+                // Verificar que el usuario padre exista antes de continuar
+                if (!$parent) {
+                    throw new \Exception('Usuario padre no encontrado.');
+                }
+
+                // Verificar que el espacio en el lado correspondiente esté libre antes de crear el nuevo usuario
+                if ($position['side'] === 'left' && $parent->left_son_id) {
+                    throw new \Exception('Espacio izquierdo ya ocupado.');
+                }
+
+                // Verificar que el espacio en el lado correspondiente esté libre antes de crear el nuevo usuario
+                if ($position['side'] === 'right' && $parent->right_son_id) {
+                    throw new \Exception('Espacio derecho ya ocupado.');
+                }
+                // Crear usuario
+                $user = User::create([
+                    'name' => $request->name,
+                    'last_name' => $request->last_name,
+                    'phone' => $request->phone,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'referred_by' => $sponsorUser->id, // el sponsor es el usuario que generó el código de referido
+                    'wallet' => 0,
+                    // Asignar el padre y el lado correspondiente para construir el árbol binario
+                    'parent_id' => $parent->id,
+                    'binary_side' => $position['side'],
+                ]);
+
+                // Actualizar el usuario padre para asignar el nuevo hijo en el lado correspondiente
+                if ($position['side'] === 'left') {
+                    $parent->left_son_id = $user->id;
+                } else {
+                    $parent->right_son_id = $user->id;
+                }
+
+                $parent->save();
+
+                Code::createForUser($user->id);
+
+                event(new Registered($user));
+
+                Auth::login($user);
+
+                return redirect(route('dashboard', absolute: false));
+            });
+
+            return $response;
+        } catch (\Exception $e) {
+            return back()
+                ->withErrors([
+                    'error' => 'No se pudo completar el registro.',
+                ])
+                ->withInput();
+        }
+    }
+
+    // Función auxiliar para encontrar la primera posición disponible en el árbol binario
+    private function findAvailablePosition($rootId)
+    {
+        $queue = [$rootId];
+
+        while (!empty($queue)) {
+            $currentId = array_shift($queue);
+
+            $current = User::find($currentId);
+
+            if (!$current) {
+                continue; // Si el usuario no existe, seguimos con el siguiente en la cola
+            }
+
+            // sirve para verificar si el usuario actual tiene espacio libre en el lado izquierdo o derecho, y si es así, devuelve la información del padre y el lado disponible. Si ambos lados están ocupados, agrega los hijos a la cola para seguir buscando.
+            if (!$current->left_son_id) {
+                return [
+                    'parent' => $current,
+                    'side' => 'left',
+                ];
+            }
+
+            // Si el lado izquierdo está ocupado, verificamos el derecho
+            if (!$current->right_son_id) {
+                return [
+                    'parent' => $current,
+                    'side' => 'right',
+                ];
+            }
+
+            // si ambos lados están ocupados, agregamos los hijos a la cola para seguir buscando
+            if ($current->left_son_id) {
+                $queue[] = $current->left_son_id;
+            }
+
+            //si el lado derecho también está ocupado, agregamos el hijo derecho a la cola para seguir buscando
+            if ($current->right_son_id) {
+                $queue[] = $current->right_son_id;
+            }
+        }
+
+        return null;
     }
 }

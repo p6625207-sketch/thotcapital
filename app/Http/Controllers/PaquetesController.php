@@ -6,6 +6,8 @@ use App\Models\Comision;
 use App\Models\Paquete;
 use App\Models\User;
 use App\Models\WalletTransaction;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PaquetesController extends Controller
 {
@@ -20,6 +22,9 @@ class PaquetesController extends Controller
 
     public function getPaqueteActivoUsuario($userId)
     {
+
+        $hoyBolivia = Carbon::now('America/La_Paz')->toDateString();
+
         $user = User::with('activeTransaction')->find($userId);
 
         if (!$user) {
@@ -61,10 +66,10 @@ class PaquetesController extends Controller
         // Para el capping diario, sumamos lo ganado hoy (comisiones + wallet transactions)
         $gananciaHoy =
             Comision::where('transaction_id', $transaction->id)
-                ->whereDate('created_at', now()->toDateString())
+                ->whereDate('created_at', $hoyBolivia)
                 ->sum('amount') +
             WalletTransaction::where('transaction_id', $transaction->id)
-                ->whereDate('created_at', now()->toDateString())
+                ->whereDate('created_at', $hoyBolivia)
                 ->sum('amount');
 
         $limiteDiario = $transaction->limite_cobro_diario;

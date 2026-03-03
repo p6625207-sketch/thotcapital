@@ -57,7 +57,7 @@ export default function AdminDashboard({ stats = { total_users: 0, total_investe
               color="text-blue-400"
             />
             <StatCard
-              label="Inversión Activa Total"
+              label="Inversión Total de Usuarios"
               value={`$${stats.total_invested.toLocaleString()}`}
               icon={DollarSign}
               color="text-emerald-400"
@@ -67,7 +67,6 @@ export default function AdminDashboard({ stats = { total_users: 0, total_investe
 
         <div className="space-y-3 sm:space-y-5 pb-8">
 
-          {/* Versión para Retiros (Original) */}
           <AdminCTA
             sectionRef={sectionWithdrawalsRef}
             title="Solicitudes de Retiro"
@@ -78,7 +77,6 @@ export default function AdminDashboard({ stats = { total_users: 0, total_investe
             variant="amber"
           />
 
-          {/* Ejemplo de uso para otra sección (Paquetes) */}
           <AdminCTA
             title="Configuración de Paquetes"
             description="Crea, edita y administra los planes de inversión, incluyendo montos mínimos, porcentajes de retorno y duración."
