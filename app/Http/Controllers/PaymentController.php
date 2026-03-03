@@ -81,7 +81,7 @@ class PaymentController extends Controller
             ]);
 
             // Propagar puntos binarios hacia los padres del usuario
-            $this->propagarPuntosBinarios($user, floatval($paquete->valor));
+           // $this->propagarPuntosBinarios($user, floatval($paquete->valor));
 
             // COMISIÓN POR REFERIDO (10%)
             if ($user->referred_by) {
