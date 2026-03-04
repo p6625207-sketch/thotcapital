@@ -37,7 +37,7 @@ export default function PackageCard({ paquete, selected, onSelect }) {
                     text={`Rendimiento ${paquete.rendimiento}% mensual`} 
                 />
                 <Feature 
-                    text={`Comisión ${paquete.comision}% por referido`} 
+                    text={`Comisión $${(Number(paquete.valor) * 0.10).toFixed(2)} por referido`} 
                 />
                   <Feature 
                     text="Ganacias del 300%" 

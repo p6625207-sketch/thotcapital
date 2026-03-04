@@ -20,6 +20,7 @@ export default function PackageCards() {
         fetchPaquetes();
     }, []);
 
+
     if (loading) {
         return (
             <div className="py-10 text-center text-slate-400 animate-pulse">
@@ -67,7 +68,7 @@ export default function PackageCards() {
                             <Wallet size={16} className="text-amber-500" />
                             Comisión por referido:
                             <span className="font-bold text-white">
-                                ${pkg.comision}
+                               ${(Number(pkg.valor) * 0.10).toFixed(2)}
                             </span>
                         </li>
 
