@@ -13,7 +13,7 @@ export default function Footer() {
           {/* Branding e Identidad */}
           <div className="space-y-3 text-center md:text-left">
             <h3 className="text-xl font-black tracking-tighter text-white uppercase">
-              EMPRENDIMIENTO <span className="text-amber-500">PRO</span>
+              Thot <span className="text-amber-500">capital</span>
             </h3>
             <p className="text-xs leading-relaxed max-w-sm mx-auto md:mx-0">
               Plataforma avanzada de gestión de capital y trading estratégico. 
@@ -38,7 +38,7 @@ export default function Footer() {
         <div className="border-t border-slate-900 mt-10 pt-8 flex flex-col md:flex-row justify-center items-center gap-4">
           <div className="flex items-center gap-2 text-[10px] font-bold tracking-widest uppercase">
             <Globe size={14} className="text-slate-600" />
-            <span>{currentYear} © EMPRENDIMIENTO PRO • BOLIVIA</span>
+            <span>{currentYear} © thot capital - bolivia</span>
           </div>
           
           
