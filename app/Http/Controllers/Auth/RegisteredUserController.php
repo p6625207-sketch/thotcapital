@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\PiramideNivel;
 use App\Models\Code;
 use Illuminate\Support\Facades\DB; // Asegúrate de tener este import arribause Illuminate\Support\Facades\Log;
 
@@ -37,12 +38,10 @@ class RegisteredUserController extends Controller
             'last_name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             //que hacia lowercase en gmail? lo quite porque me daba problemas con los emails que tienen mayusculas, y el unique no los reconocia como iguales
-            'email' =>
-                'required|string|email|max:255|unique:' . User::class,
+            'email' => 'required|string|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'referred_by' => 'required|string|max:255',
         ]);
-        
 
         if ($request->referred_by) {
             $codeData = Code::where('code', $request->referred_by)->first();
@@ -101,6 +100,30 @@ class RegisteredUserController extends Controller
 
                 //nivel del nuevo usuario es el nivel del padre + 1
                 $nivelNuevoUsuario = $parent->nivel + 1;
+
+                //verificar que el nivel exista en la tabla de piramide_niveles
+                $nivelExiste = PiramideNivel::where(
+                    'nivel',
+                    $nivelNuevoUsuario
+                )->exists();
+
+                /** 
+                 * en caso de que la empresa quiera poner un nivel tope para la pirámide, 
+                 * aquí se podría lanzar una excepción si el nivel del nuevo usuario supera 
+                 * ese tope, por ejemplo:
+                 * 
+               * if(!$nivelExiste){
+               *      throw new \Exception('Se alcanzó el nivel máximo permitido.');
+
+               * }
+                     */
+
+                if (!$nivelExiste) {
+                    PiramideNivel::create([
+                        'nivel' => $nivelNuevoUsuario,
+                        'porcentaje' => 0, // o el porcentaje que quieras asignar por defecto
+                    ]);
+                }
 
                 // Crear usuario
                 $user = User::create([

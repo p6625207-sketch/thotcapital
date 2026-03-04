@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Http\Request;
 use App\Models\Code;
+use App\Models\PiramideNivel;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -107,6 +108,22 @@ class SocialLoginController extends Controller
 
             //calcular el nivel del nuevo usuario como el nivel del padre + 1
             $nivelNuevoUsuario = $parent->nivel + 1;
+
+            $nivelExiste = PiramideNivel::where('nivel', $nivelNuevoUsuario)->exists();
+
+            /**
+             * if(!$nivelExiste){ {
+              *  throw new \Exception('Se alcanzó el nivel máximo permitido en la pirámide.');
+            *}
+             */
+
+            if (!$nivelExiste){
+                PiramideNivel::create([
+                    'nivel' => $nivelNuevoUsuario,
+                    'porcentaje' => 0, // o el porcentaje que corresponda para ese nivel
+                ]);
+
+            }
 
             $user = User::create([
                 'name' => $googleData['name'],
