@@ -6,19 +6,21 @@ export default function Footer() {
   return (
     <footer className="bg-[#000000] text-slate-400 border-t border-slate-900">
       <div className="container mx-auto px-6 py-10">
-        
+
         {/* Grilla Principal Simplificada */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          
+
           {/* Branding e Identidad */}
           <div className="space-y-3 text-center md:text-left">
             <h3 className="text-xl font-black tracking-tighter text-white uppercase">
               Thot <span className="text-amber-500">capital</span>
             </h3>
+
             <p className="text-xs leading-relaxed max-w-sm mx-auto md:mx-0">
-              Plataforma avanzada de gestión de capital y trading estratégico. 
+              Plataforma avanzada de gestión de capital y trading estratégico.
               Seguridad y transparencia en cada operación.
             </p>
+
           </div>
 
           {/* Advertencia Legal Minimalista */}
@@ -28,7 +30,7 @@ export default function Footer() {
               <span className="text-[10px] font-bold uppercase tracking-widest">Sistema Protegido</span>
             </div>
             <p className="text-[10px] uppercase leading-4 tracking-tight text-center md:text-left">
-              El trading implica riesgo. Solo invierta capital que esté dispuesto a perder. 
+              El trading implica riesgo. Solo invierta capital que esté dispuesto a perder.
               <span className="text-amber-500 font-bold ml-1 italic">Opere con prudencia.</span>
             </p>
           </div>
@@ -40,8 +42,8 @@ export default function Footer() {
             <Globe size={14} className="text-slate-600" />
             <span>{currentYear} © thot capital - bolivia</span>
           </div>
-          
-          
+
+
         </div>
       </div>
     </footer>
