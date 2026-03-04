@@ -9,6 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    #agregamos un paso para hacer el deploy a EasyPanel
     steps:
       - name: Trigger EasyPanel Deploy
         run: |
