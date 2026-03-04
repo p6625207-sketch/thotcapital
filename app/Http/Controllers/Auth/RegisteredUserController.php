@@ -96,6 +96,10 @@ class RegisteredUserController extends Controller
                 if ($position['side'] === 'right' && $parent->right_son_id) {
                     throw new \Exception('Espacio derecho ya ocupado.');
                 }
+
+                //nivel del nuevo usuario es el nivel del padre + 1
+                $nivelNuevoUsuario = $parent->nivel + 1;
+
                 // Crear usuario
                 $user = User::create([
                     'name' => $request->name,
@@ -108,6 +112,7 @@ class RegisteredUserController extends Controller
                     // Asignar el padre y el lado correspondiente para construir el árbol binario
                     'parent_id' => $parent->id,
                     'binary_side' => $position['side'],
+                    'nivel' => $nivelNuevoUsuario,
                 ]);
 
                 // Actualizar el usuario padre para asignar el nuevo hijo en el lado correspondiente

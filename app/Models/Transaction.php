@@ -19,12 +19,14 @@ class Transaction extends Model
         'is_active',
         'tx_id',
         'paid_at',
+        'paid_at_binario',
     ];
 
     protected $casts = [
         'started_at' => 'datetime',
         'paid_at' => 'datetime',
         'is_active' => 'boolean',
+        'paid_at_binario' => 'datetime',
     ];
 
     public function user(): BelongsTo

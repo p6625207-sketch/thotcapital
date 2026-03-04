@@ -36,7 +36,7 @@ class ProcesarComisionesPiramide extends Command
 
         // Misma condición que ProcesarPagosMensuales: transacciones activas vencidas
         $transacciones = Transaction::where('is_active', true)
-            ->where('paid_at', '<=', Carbon::now())
+            ->where('paid_at_binario', '<=', Carbon::now('America/La_Paz'))
             ->with('user')
             ->get();
 
@@ -45,7 +45,6 @@ class ProcesarComisionesPiramide extends Command
         $today = Carbon::now('America/La_Paz')->toDateString();
 
         foreach ($transacciones as $transaccion) {
-
             $usuario = $transaccion->user;
             if (!$usuario) {
                 continue;
@@ -72,13 +71,25 @@ class ProcesarComisionesPiramide extends Command
 
                 //obtener hijo izquierdo directo del usuario
                 $leftUser = $usuario->left_son_id
-                ?User::with('activeTransaction')->find($usuario->left_son_id)
-                : null;
+                    ? User::with('activeTransaction')->find(
+                        $usuario->left_son_id
+                    )
+                    : null;
 
                 //obtener hijo derecho directo del usuario
                 $rightUser = $usuario->right_son_id
-                ?User::with('activeTransaction')->find($usuario->right_son_id)
-                : null;
+                    ? User::with('activeTransaction')->find(
+                        $usuario->right_son_id
+                    )
+                    : null;
+
+                //si no tiene los 2 referidos directos, no se paga pirámide
+                if (!$leftUser || !$rightUser) {
+                    Log::info(
+                        "Usuario #{$usuario->id} no tiene ambos hijos directos para pirámide. Se omite."
+                    );
+                    return;
+                }
 
                 $leftTx = $leftUser?->activeTransaction;
                 $rightTx = $rightUser?->activeTransaction;
@@ -87,14 +98,25 @@ class ProcesarComisionesPiramide extends Command
 
                 //calcular el lado menor activo entre los hijos directos
                 if ($leftTx && $rightTx) {
-                    $montoBase = min(
-                        (float) $leftTx->paquete_valor,
+
+                // si ambos hijos tienen transacción activa, se toma el menor valor de paquete entre los dos para calcular la comisión, y se registra el from_user_id como el hijo que genera la comisión (el lado menor)
+                    if (
+                        (float) $leftTx->paquete_valor <=
                         (float) $rightTx->paquete_valor
-                    );
+                    ) {
+                        $montoBase = (float) $leftTx->paquete_valor;
+                        $fromUserId = $leftUser->id; // lado izquierdo es menor
+                    } else {
+                        $montoBase = (float) $rightTx->paquete_valor;
+                        $fromUserId = $rightUser->id; // lado derecho es menor
+                    }
+
                 } elseif ($leftTx) {
                     $montoBase = (float) $leftTx->paquete_valor;
+                    $fromUserId = $leftUser->id; // si solo el hijo izquierdo tiene transacción activa, se toma su valor de paquete para calcular la comisión, y se registra el from_user_id como el hijo izquierdo
                 } elseif ($rightTx) {
                     $montoBase = (float) $rightTx->paquete_valor;
+                    $fromUserId = $rightUser->id; // si solo el hijo derecho tiene transacción activa, se toma su valor de paquete para calcular la comisión, y se registra el from_user_id como el hijo derecho
                 }
 
                 if ($montoBase === null || $montoBase <= 0) {
@@ -118,8 +140,8 @@ class ProcesarComisionesPiramide extends Command
                     $usuario->increment('wallet_balance', $montoFinal);
 
                     DB::table('comisions')->insert([
-                        'user_id' => $usuario->id,
-                        'from_user_id' => $usuario->id,
+                        'user_id' => $usuario->id, // el receptor de la comisión es el usuario actual del ciclo
+                        'from_user_id' => $fromUserId, // el generador de la comisión es el hijo directo con el menor paquete activo
                         'transaction_id' => $transaccion->id,
                         'amount' => $montoFinal,
                         'created_at' => now('America/La_Paz'),
@@ -128,15 +150,20 @@ class ProcesarComisionesPiramide extends Command
 
                     $pagados++;
 
-                     Log::info(
+                    Log::info(
                         "BINARIO NIVEL {$nivelUsuario}: Usuario #{$usuario->id} cobró {$montoFinal} " .
-                        "(Base {$montoBase} × {$porcentaje}%)"
+                            "(Base {$montoBase} × {$porcentaje}%)"
                     );
 
-                    $pagados++;
-
+                    // Actualizar la fecha de pago binario para el próximo mes (versión segura)
+                    $transaccion->update([
+                        'paid_at_binario' => $transaccion->paid_at_binario
+                            ? Carbon::parse(
+                                $transaccion->paid_at_binario
+                            )->addMonth()
+                            : now('America/La_Paz')->addMonth(),
+                    ]);
                 }
-
             });
 
             $procesados++;

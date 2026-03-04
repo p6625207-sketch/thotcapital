@@ -28,6 +28,7 @@ class User extends Authenticatable
         'right_son_id',
         'puntos_izquierda',
         'puntos_derecha',
+        'nivel',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -36,6 +37,7 @@ class User extends Authenticatable
         'wallet_balance' => 'decimal:8',
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'nivel' => 'integer',
     ];
 
     // Código de referido

@@ -77,8 +77,10 @@ class PaymentController extends Controller
                 'status' => 'completed',
                 'is_active' => true,
                 'tx_id' => $matchingDeposit['txId'],
-                'paid_at' => now()->addMonth(),
-            ]);
+                'paid_at' => now('America/La_Paz')->addMonth(),// la fecha de pago se establece para el próximo mes, ya que el pago se procesa inmediatamente al confirmar el depósito
+                'paid_at_binario' => now('America/La_Paz')->addMonth(), 
+
+                ]);
 
             // Propagar puntos binarios hacia los padres del usuario
            // $this->propagarPuntosBinarios($user, floatval($paquete->valor));

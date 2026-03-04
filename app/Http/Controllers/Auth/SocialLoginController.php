@@ -105,6 +105,9 @@ class SocialLoginController extends Controller
                 throw new \Exception('Espacio derecho ocupado.');
             }
 
+            //calcular el nivel del nuevo usuario como el nivel del padre + 1
+            $nivelNuevoUsuario = $parent->nivel + 1;
+
             $user = User::create([
                 'name' => $googleData['name'],
                 'last_name' => $googleData['last_name'],
@@ -114,6 +117,7 @@ class SocialLoginController extends Controller
                 'wallet' => 0,
                 'parent_id' => $parent->id,
                 'binary_side' => $position['side'],
+                'nivel' => $nivelNuevoUsuario,
             ]);
 
             // Actualizar el usuario padre para asignar el nuevo hijo en el lado correspondiente del árbol binario

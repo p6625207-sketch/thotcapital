@@ -31,7 +31,7 @@ class ProcesarPagosMensuales extends Command
     {
 
         $transacciones = Transaction::where('is_active', true)
-            ->where('paid_at', '<=', Carbon::now())
+            ->where('paid_at', '<=', Carbon::now('America/La_Paz'))
             ->with('user')
             ->get();
 
