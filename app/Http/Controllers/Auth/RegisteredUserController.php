@@ -36,11 +36,13 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
+            //que hacia lowercase en gmail? lo quite porque me daba problemas con los emails que tienen mayusculas, y el unique no los reconocia como iguales
             'email' =>
-                'required|string|lowercase|email|max:255|unique:' . User::class,
+                'required|string|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'referred_by' => 'required|string|max:255',
         ]);
+        
 
         if ($request->referred_by) {
             $codeData = Code::where('code', $request->referred_by)->first();
