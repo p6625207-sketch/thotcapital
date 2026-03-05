@@ -99,7 +99,7 @@ class RegisteredUserController extends Controller
                 }
 
                 //nivel del nuevo usuario es el nivel del padre + 1
-                $nivelNuevoUsuario = $parent->nivel + 1;
+                $nivelNuevoUsuario = $parent->nivel_id + 1;
 
                 //verificar que el nivel exista en la tabla de piramide_niveles
                 $nivelExiste = PiramideNivel::where(
@@ -137,7 +137,7 @@ class RegisteredUserController extends Controller
                     // Asignar el padre y el lado correspondiente para construir el árbol binario
                     'parent_id' => $parent->id,
                     'binary_side' => $position['side'],
-                    'nivel' => $nivelNuevoUsuario,
+                    'nivel_id' => $nivelNuevoUsuario,
                 ]);
 
                 // Actualizar el usuario padre para asignar el nuevo hijo en el lado correspondiente

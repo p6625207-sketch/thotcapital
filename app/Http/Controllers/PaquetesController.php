@@ -81,6 +81,13 @@ class PaquetesController extends Controller
                 ? min(100, ($gananciaHoy / $limiteDiario) * 100)
                 : 0;
 
+        //nivel al que pertenece el usuario
+        $nivelPiramide = $user->piramideNivel?->nivel ?? 0;
+
+        $porcentajeNivel = $user->piramideNivel?->porcentaje ?? 0;
+
+
+
         return response()->json([
             'id' => $transaction->id,
             'nombre' => $transaction->paquete_nombre,
@@ -92,6 +99,9 @@ class PaquetesController extends Controller
             'capacidad_disponible' => round($capacidadDisponible, 2),
             'porcentaje_progreso' => round($porcentajeProgreso, 2),
             'limite_maximo' => round($limiteGlobal, 2),
+
+            'nivel_usuario' => $nivelPiramide,
+            'porcentaje_nivel_comision' => (float) $porcentajeNivel,
 
             'ganancia_hoy' => round($gananciaHoy, 2),
             'porcentaje_diario' => round($porcentajeDiario, 2),

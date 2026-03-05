@@ -58,7 +58,9 @@ class ProcesarComisionesPiramide extends Command
                 &$pagados
             ) {
                 //
-                $nivelUsuario = $usuario->nivel;
+                $nivelUsuario = $usuario->nivel_id; // nivel del usuario actual en la pirámide
+
+                 // Si el nivel del usuario es 0 o negativo, no se paga pirámide
 
                 if (!isset($niveles[$nivelUsuario])) {
                     Log::warning(

@@ -28,7 +28,7 @@ class User extends Authenticatable
         'right_son_id',
         'puntos_izquierda',
         'puntos_derecha',
-        'nivel',
+        'nivel_id',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -37,7 +37,6 @@ class User extends Authenticatable
         'wallet_balance' => 'decimal:8',
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'nivel' => 'integer',
     ];
 
     // Código de referido
@@ -87,5 +86,11 @@ class User extends Authenticatable
     public function retiros(): HasMany
     {
         return $this->hasMany(Retiro::class);
+    }
+
+    //un usuario puede perteneces solo a un nivel de la pirámide, entonces es una relación hasOne
+    public function piramideNivel(): BelongsTo
+    {
+        return $this->belongsTo(PiramideNivel::class, 'nivel_id', 'nivel');
     }
 }

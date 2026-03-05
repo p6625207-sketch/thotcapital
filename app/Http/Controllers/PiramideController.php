@@ -18,7 +18,7 @@ class PiramideController extends Controller
 
         // Construye la pirámide nivel a nivel usando la cadena de referidos
         $usersByLevel = [];
-        $currentIds   = User::whereNull('referred_by')->pluck('id')->toArray();
+        $currentIds   = User::whereNull('parent_id')->pluck('id')->toArray();
         $maxNivel     = $nivelesConfig->count() ?: 8;
 
         for ($depth = 1; $depth <= $maxNivel; $depth++) {
@@ -37,7 +37,7 @@ class PiramideController extends Controller
                 ];
 
                 // Siguiente nivel: usuarios referidos por los del nivel actual
-                $currentIds = User::whereIn('referred_by', $currentIds)
+                $currentIds = User::whereIn('parent_id', $currentIds)
                     ->pluck('id')
                     ->toArray();
             }
