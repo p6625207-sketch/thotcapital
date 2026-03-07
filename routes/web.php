@@ -14,7 +14,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Auth\SocialLoginController;
- 
+use App\Http\Controllers\BinaryTreeController;
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -90,6 +91,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/retiros', [RetiroController::class, 'crearRetiro']);
 
     Route::post('/payment/verify', [PaymentController::class, 'verifyPayment']);
+
+    // NUEVA RUTA PARA LA RED PERSONAL
+    Route::get('/network', [BinaryTreeController::class, 'index'])->name('user.network');
 
 });
    

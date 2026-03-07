@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Link, usePage } from '@inertiajs/react'
-import { Home, Package, Wallet, Users, History, Settings, Menu, X, LogOut } from 'lucide-react'
+import { Home, Package, Wallet, Users, History, Settings, Menu, X, LogOut, NetworkIcon } from 'lucide-react'
 
 export default function AuthenticatedLayout({ children }) {
     const { auth } = usePage().props
-    const { url } = usePage() 
+    const { url } = usePage()
     const user = auth?.user
 
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -14,6 +14,7 @@ export default function AuthenticatedLayout({ children }) {
         { name: 'Paquetes', href: '/packages', icon: Package },
         { name: 'Retiros', href: '/withdrawals', icon: Wallet },
         { name: 'Referidos', href: '/referrals', icon: Users },
+        { name: 'Árbol Binario', href: '/network', icon: NetworkIcon },
         { name: 'Historial', href: '/history', icon: History },
         { name: 'Perfil', href: '/profile', icon: Settings },
     ]
@@ -40,9 +41,8 @@ export default function AuthenticatedLayout({ children }) {
 
 
             <aside
-                className={`fixed left-0 top-0 z-40 h-screen w-72 border-r border-slate-700 bg-slate-900 transition-transform duration-300 ${
-                    sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-                } lg:translate-x-0`}
+                className={`fixed left-0 top-0 z-40 h-screen w-72 border-r border-slate-700 bg-slate-900 transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+                    } lg:translate-x-0`}
             >
                 <div className="flex h-full flex-col p-6">
 
@@ -54,7 +54,7 @@ export default function AuthenticatedLayout({ children }) {
                     </div>
 
 
-                    <div className="mb-8 mt-16 sm:mt-16 md:mt-0 border-b border-slate-700 pb-6">
+                    <div className="mb-5 mt-16 sm:mt-16 md:mt-0 border-b border-slate-700 pb-6">
                         <div className="flex items-center gap-3">
                             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500 font-bold text-white">
                                 {user.name?.charAt(0).toUpperCase()}
@@ -66,7 +66,7 @@ export default function AuthenticatedLayout({ children }) {
                         </div>
                     </div>
 
-                    <nav className="flex-1 space-y-2">
+                    <nav className="flex-1 space-y-1">
                         {navigation.map((item) => {
                             const Icon = item.icon
                             const isActive = url.startsWith(item.href)
@@ -76,11 +76,10 @@ export default function AuthenticatedLayout({ children }) {
                                     key={item.name}
                                     href={item.href}
                                     onClick={() => setSidebarOpen(false)}
-                                    className={`flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${
-                                        isActive
-                                            ? 'bg-slate-800 text-amber-400'
-                                            : 'text-slate-400 hover:bg-slate-800 hover:text-amber-400'
-                                    }`}
+                                    className={`flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${isActive
+                                        ? 'bg-slate-800 text-amber-400'
+                                        : 'text-slate-400 hover:bg-slate-800 hover:text-amber-400'
+                                        }`}
                                 >
                                     <Icon size={20} />
                                     <span>{item.name}</span>
@@ -89,7 +88,7 @@ export default function AuthenticatedLayout({ children }) {
                         })}
                     </nav>
 
-                    <div className="border-t border-slate-700 pt-6">
+                    <div className="border-t border-slate-700 pt-4">
                         <Link
                             href="/logout"
                             method="post"
