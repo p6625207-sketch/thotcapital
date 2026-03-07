@@ -62,7 +62,7 @@ export default function NetworkLevelItem({
                         initial={{ height: 0, opacity: 0, y: -10 }}
                         animate={{ height: "auto", opacity: 1, y: 0 }}
                         exit={{ height: 0, opacity: 0, y: -10 }}
-                        className="overflow-hidden bg-slate-900/60 border-x border-b border-slate-800 rounded-b-2xl mx-2 pt-2 md:pt-4 px-2 md:px-4 pb-2 md:pb-4 shadow-inner"
+                        className="overflow-hidden bg-slate-900/60 border-x border-b border-slate-800 rounded-b-2xl mx-1 pt-2 md:pt-4 px-2 md:px-4 pb-2 md:pb-4 shadow-inner"
                     >
                         <div className="grid grid-cols-1 gap-1">
                             {level.usuarios.map((u) => (

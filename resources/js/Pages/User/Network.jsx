@@ -39,7 +39,7 @@ export default function Network({ tree }) {
         <AuthenticatedLayout>
             <Head title="Mi Red Binaria" />
 
-            <div className="flex flex-col items-center justify-start min-h-screen w-full max-w-full mx-auto pb-32 md:pb-4 overflow-y-auto">
+            <div className="flex flex-col items-center justify-start min-h-screen w-full mx-auto pb-32 md:pb-10 overflow-y-auto px-full md:px-6">
                 <div className="text-center mb-4 md:mb-6 w-full">
 
                     <h1 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">

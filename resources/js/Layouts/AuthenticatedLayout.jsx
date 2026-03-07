@@ -110,7 +110,7 @@ export default function AuthenticatedLayout({ children }) {
             )}
 
             <main className="min-h-screen pt-20 lg:ml-72 lg:pt-0">
-                <div className="p-6 lg:p-12">
+                <div className="p-4 md:p-6 lg:p-12">
                     {children}
                 </div>
             </main>
