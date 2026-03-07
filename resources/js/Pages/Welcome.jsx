@@ -10,7 +10,6 @@ import PlanesHeader from '@/Components/Welcome/PlanesHeader';
 import TeamSection from "@/Components/Welcome/TeamSection";
 import TestimonialsSection from "@/Components/Welcome/TestimonialsSection";
 import BlogSection from "@/Components/Welcome/BlogSection";
-import PaymentMethods from "@/Components/Welcome/PaymentMethods";
 
 export default function Welcome() {
 
@@ -27,7 +26,6 @@ export default function Welcome() {
             <TeamSection />
             <TestimonialsSection />
             <BlogSection />
-            <PaymentMethods />
         </Layout>
     );
 

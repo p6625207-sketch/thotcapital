@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CheckCircle2, Zap, TrendingUp, Wallet, Coins } from "lucide-react";
+import { CheckCircle2, Zap, TrendingUp, Wallet, Coins, DollarSign } from "lucide-react";
 import PaqueteService from "@/Services/paquete.service";
 import { Link } from "@inertiajs/react";
 
@@ -75,6 +75,11 @@ export default function PackageCards() {
                         <li className="flex items-center gap-2 text-slate-300">
                             <Coins size={16} className="text-amber-500" />
                             Genere hasta un: 300% de su inversión
+                        </li>
+
+                        <li className="flex items-center gap-2 text-slate-300">
+                            <DollarSign size={16} className="text-amber-500" />
+                            25 USDT Menbresía Vitalicia
                         </li>
 
                         {pkg.features?.map((feature, idx) => (

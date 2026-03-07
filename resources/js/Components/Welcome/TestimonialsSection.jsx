@@ -6,21 +6,22 @@ const testimonials = [
         name: "Claudia Moreno",
         location: "Bolivia",
         text: "Me gusta porque mi dinero esta vez si esta trabajando para mi, yo tenia un negocio propio de venta de helados pero aquí estoy ganando mucho mas, gracias a mi patrocinadora.",
-        image: "https://res.cloudinary.com/dcyx3nqj5/image/upload/v1771236855/Captura_de_pantalla_2026-02-16_061116_yhsrba.png",
+        image: "https://res.cloudinary.com/dcyx3nqj5/image/upload/v1772893218/WhatsApp_Image_2026-03-06_at_7.19.56_PM_ozvre0.jpg",
         stars: 4
     },
     {
-        name: "Flavio Gomez",
+        name: "Fabio Gomez",
         location: "España",
         text: "Me esta cambiando la vida y eso me gusta ya que antes mis sueños los veía muy lejos de cumplirlos.",
-        image: "https://res.cloudinary.com/dcyx3nqj5/image/upload/v1771236848/Captura_de_pantalla_2026-02-16_061100_iv9hpt.png",
+        image: "https://res.cloudinary.com/dcyx3nqj5/image/upload/v1772893218/WhatsApp_Image_2026-03-06_at_qbrdju.jpg",
         stars: 4
     },
     {
         name: "Eduardo Lopez",
         location: "Colombia",
         text: "Soy docente de una universidad muy importante de mi país, ya había visto la historias de otras personas que ganaban muy bien y dije bueno que ya era mi turno y gracias a Dios gano un poco mas que docente.",
-        image: "https://res.cloudinary.com/dcyx3nqj5/image/upload/v1771236848/Captura_de_pantalla_2026-02-16_061040_g5gt0x.png"
+        image: "https://res.cloudinary.com/dcyx3nqj5/image/upload/v1772893218/WhatsApp_Image_2026-03-06_at_7.19.56_P_tdf8iq.jpg",
+        stars: 5
     }
 ];
 
