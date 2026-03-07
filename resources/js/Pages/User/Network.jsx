@@ -43,7 +43,7 @@ export default function Network({ tree }) {
                 <div className="text-center mb-4 md:mb-6 w-full">
 
                     <h1 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">
-                        ESTRUCTURA <span className="text-amber-500">BINARIA</span>
+                        TU ESTRUCTURA <span className="text-amber-500">BINARIA</span>
                     </h1>
                     <p className="text-slate-500 text-xs tracking-[0.3em] uppercase mb-3">
                         VISUALIZACIÓN DE CRECIMIENTO Y DERRAME
