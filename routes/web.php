@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\BinaryTreeController;
+use App\Http\Controllers\NoticiasController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -160,6 +161,9 @@ Route::get('/Politicas', function () {
 Route::get('/Contacto', function () {
     return Inertia::render('HeaderSections/Contacto');
 });
+
+//ruta para obtener las noticias
+Route::get('/getNoticias', [NoticiasController::class, 'getNews'])->name('noticias.get');
 
 
 // rutas de login social
